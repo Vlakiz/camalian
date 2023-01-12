@@ -3,7 +3,7 @@
 module Camalian
   module Quantization
     class MedianCut # :nodoc:
-      SplitInfo = Struct.new(:range, :group_index, :color, keyword_init: true)
+      SplitInfo = Struct.new(:range, :group_index, :color)
       def process(colors, count)
         # Its faster to extract unique colors once
         colors = colors.uniq
@@ -37,9 +37,9 @@ module Camalian
           blues = group.map(&:b)
 
           ranges = []
-          ranges << SplitInfo.new(group_index: index, range: reds.max - reds.min, color: :r) unless reds.empty?
-          ranges << SplitInfo.new(group_index: index, range: greens.max - greens.min, color: :g) unless greens.empty?
-          ranges << SplitInfo.new(group_index: index, range: blues.max - blues.min, color: :b) unless blues.empty?
+          ranges << SplitInfo.new(index, reds.max - reds.min, :r) unless reds.empty?
+          ranges << SplitInfo.new(index, greens.max - greens.min, :g) unless greens.empty?
+          ranges << SplitInfo.new(index, blues.max - blues.min, :b) unless blues.empty?
 
           stats << ranges.max_by(&:range)
         end
